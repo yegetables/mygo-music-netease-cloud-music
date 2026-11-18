@@ -5,7 +5,7 @@
   "minAppVersion": "0.1.20",
   "main": "index.js",
   "playback": "stream",
-  "permissions": { "network": ["music.163.com", "interfacepc.music.163.com"] },
+  "permissions": { "network": ["*"] },
   "settings": [
     {
       "key": "quality",
@@ -16,6 +16,27 @@
       "key": "loginMethod",
       "label": "Sign-in Method",
       "help": "Leave empty or use qr for QR sign-in; use web for website sign-in."
+    },
+    {
+      "key": "unblock",
+      "label": "Unlock unavailable songs",
+      "help": "Ask a self-hosted unlock service when a song has no full stream. Off by default.",
+      "type": "boolean"
+    },
+    {
+      "key": "unblockServer",
+      "label": "Unlock service",
+      "help": "The service you deployed: api-enhanced (route /song/url/match) or UnblockNeteaseMusic-utils (route /match). Both repositories are linked in the README.",
+      "type": "select",
+      "options": [
+        { "value": "api-enhanced", "label": "api-enhanced" },
+        { "value": "utils", "label": "UnblockNeteaseMusic-utils" }
+      ]
+    },
+    {
+      "key": "unblockApi",
+      "label": "Unlock service URL",
+      "help": "Base URL of your deployment, e.g. https://music-api.example.com. Leave empty to disable."
     }
   ],
   "navigation": [

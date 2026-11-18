@@ -103,5 +103,11 @@
   "Unsupported audio format: {type}": "不支持的音频格式：{type}",
   "Following {following} · Followers {followers}": "{following} 关注 · {followers} 粉丝",
   "{name} · {likes} likes": "{name} · {likes} 赞",
-  "Recommended": "推荐"
+  "Recommended": "推荐",
+  "Unlock unavailable songs": "解锁无法播放的歌曲",
+  "Ask a self-hosted unlock service when a song has no full stream. Off by default.": "歌曲没有完整音源时，向你自建的解锁服务查询。默认关闭。",
+  "Unlock service": "解锁服务",
+  "The service you deployed: api-enhanced (route /song/url/match) or UnblockNeteaseMusic-utils (route /match). Both repositories are linked in the README.": "你部署的服务：api-enhanced（路由 /song/url/match）或 UnblockNeteaseMusic-utils（路由 /match）。两个仓库见 README。",
+  "Unlock service URL": "解锁服务地址",
+  "Base URL of your deployment, e.g. https://music-api.example.com. Leave empty to disable.": "你部署的地址，例如 https://music-api.example.com。留空则不查询。"
 }

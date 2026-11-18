@@ -6,6 +6,7 @@ import { LEVELS, SITE, UA } from "./constants.js";
 import { trackIdentity } from "./models.js";
 import type { ServiceLyrics, ServiceStream } from "./service-types.js";
 import type { ByID, LyricLine, LyricWord } from "./types.js";
+import { unblockedStream } from "./unblock.js";
 import { fail, https, transient, tr } from "./utils.js";
 
 export function timedTranslations(text: string) {
@@ -143,6 +144,10 @@ export async function stream({ id: value, quality = "standard" }: ByID & { quali
   const { endpoint, result } = await serviceStream(identity.audio, level);
   const item = (result.data || []).find((t) => String(t.id) === identity.audio) || result.data?.[0];
   if (!item?.url || item.freeTrialInfo != null) {
+    // unblock:begin — re-apply after upstream refactors stream()
+    const unblocked = await unblockedStream(identity.audio);
+    if (unblocked) return unblocked;
+    // unblock:end
     console.log(
       `stream ${identity.audio} via ${endpoint}: no full stream (id ${item?.id ?? "none"}, ` +
         `url ${Boolean(item?.url)}, trial ${item?.freeTrialInfo != null}, ` +

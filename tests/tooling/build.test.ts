@@ -63,7 +63,8 @@ test("bundle is standalone, preserves exports, metadata, locales and permissions
       await readFile(resolve(root, name)),
     );
   }
-  assert.deepEqual(manifest.permissions.network, ["music.163.com", "interfacepc.music.163.com"]);
+  // The unlock service address is entered in settings, so any host is allowed.
+  assert.deepEqual(manifest.permissions.network, ["*"]);
   assert.equal(manifest.permissions.process, undefined);
   // Catch cycles even when a bundler can silently flatten them.
   const visit = (path: string, chain: Set<string>) => {

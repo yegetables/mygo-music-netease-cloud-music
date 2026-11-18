@@ -1,6 +1,6 @@
 # NetEase Cloud Music for MyGo Music
 
-A NetEase Cloud Music plugin for [MyGo Music](https://github.com/egoist/mygo-music). No API server or extra programs are needed.
+A NetEase Cloud Music plugin for [MyGo Music](https://github.com/egoist/mygo-music). No API server or extra programs are needed unless you turn on unlocking below.
 
 ## Install
 
@@ -22,6 +22,35 @@ Use the plugin ZIP attached to a release for manual installation, not GitHub's s
 Subscription, purchase and regional restrictions still apply. Trial previews are not played as full songs. Liked songs are managed with song hearts, not playlist editing. Video playback and FM dislike/trash actions are not supported.
 
 Sessions are stored **unencrypted** in the host's plugin data files, not the system keychain. Session cookies go only to `music.163.com` and `interfacepc.music.163.com`.
+
+## Unlocking unavailable songs
+
+Optional and off by default. A song may have no full stream because of a membership, a purchase, a region, or because it was delisted. Turn on **Unlock unavailable songs** in **Settings > Plugins**, choose the service you deployed, and fill in its base URL. The plugin then asks that service once for a playable URL instead of reporting the song as unavailable.
+
+Two services work, and both run the same matcher:
+
+| Service                   | Repository                                                                                                                          | Route                 |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| api-enhanced              | [NeteaseCloudMusicApiEnhanced/api-enhanced](https://github.com/NeteaseCloudMusicApiEnhanced/api-enhanced)                           | `/song/url/match?id=` |
+| UnblockNeteaseMusic-utils | [NeteaseCloudMusicApiEnhanced/UnblockNeteaseMusic-utils](https://github.com/NeteaseCloudMusicApiEnhanced/UnblockNeteaseMusic-utils) | `/match?id=`          |
+
+api-enhanced bundles the matcher, so one container is all you need:
+
+```sh
+docker run -d -p 3000:3000 moefurina/ncm-api:latest
+```
+
+Or run the matcher alone:
+
+```sh
+npx @neteasecloudmusicapienhanced/unblockmusic-utils --port 3000
+```
+
+Then fill in the address you started it on, such as `http://192.168.1.10:3000` on a LAN or `https://music-api.example.com` in public. Nothing is requested while the toggle is off, and a service that does not answer costs one request, not a failed track.
+
+This fork declares the network permission as `["*"]` instead of listing hosts, so the address can be entered in settings. The unlock request carries no session cookie; cookies still go only to `music.163.com` and `interfacepc.music.163.com`.
+
+Matching uses third-party sources. What you may play is still decided by your own account, your region, and the law where you live.
 
 ## Development
 

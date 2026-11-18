@@ -596,7 +596,8 @@ test("manifest loads a portable entry with only required network permissions", a
   const pkg = JSON.parse(await readFile(new URL("../package.json", import.meta.url), "utf8"));
   assert.equal(manifest.version, pkg.version);
   assert.match(manifest.minAppVersion, /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/);
-  assert.deepEqual(manifest.permissions.network, ["music.163.com", "interfacepc.music.163.com"]);
+  // The unlock service address is entered in settings, so any host is allowed.
+  assert.deepEqual(manifest.permissions.network, ["*"]);
   assert.equal(manifest.permissions.process, undefined);
   assert.equal(manifest.main, "index.js");
   assert.equal(manifest.imageSizes, undefined);
