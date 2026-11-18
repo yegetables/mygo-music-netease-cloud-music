@@ -43,7 +43,11 @@ export function toTrack(t: ServiceSong, privilege = t.privilege): Track {
     album: toAlbum(t.al || t.album),
     duration: t.dt ?? t.duration ?? 0,
     url: `${SITE}/song?id=${t.id}`,
-    unavailable: privilege ? privilege.st < 0 || privilege.pl <= 0 : t.fee === 1 || t.fee === 4,
+    // While the unlock service may still find a copy, the listener's account no
+    // longer decides whether the song is greyed out in a list.
+    unavailable:
+      host.setting("unblock") !== "true" &&
+      (privilege ? privilege.st < 0 || privilege.pl <= 0 : t.fee === 1 || t.fee === 4),
   };
 }
 

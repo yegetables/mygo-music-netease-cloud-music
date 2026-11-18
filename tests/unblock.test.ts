@@ -3,7 +3,7 @@
 
 import assert from "node:assert/strict";
 import test from "node:test";
-import { harness, type Call } from "./harness.ts";
+import { harness, song, type Call } from "./harness.ts";
 
 // NetEase answers a song it will not stream in full with a preview, or with no
 // URL at all.
@@ -67,4 +67,38 @@ test("the unlock request carries no session cookie", async () => {
   await h.plugin.stream({ id: "1" });
   assert.equal(asked.length, 1);
   assert.equal(Object.hasOwn(asked[0].options, "headers"), false);
+});
+
+// A song NetEase will not stream for this account is greyed out in lists, and
+// the host then refuses to start it — the unlock service never gets a turn.
+const blockedDetails = (params: Call["params"]) => {
+  const ids = (JSON.parse(String(params.c)) as { id: number }[]).map((t) => t.id);
+  return {
+    songs: ids.map((id) => song(id, { fee: 1 })),
+    privileges: ids.map((id) => ({ id, st: 0, pl: 0 })),
+  };
+};
+
+const searchFor = (settings?: Record<string, string>) =>
+  harness(
+    ({ path, params }) => {
+      if (path === "/api/cloudsearch/pc") return { result: { songs: [song(1)], songCount: 1 } };
+      if (path === "/api/v3/song/detail") return blockedDetails(params);
+    },
+    settings ? { settings } : {},
+  );
+
+test("the unlock toggle keeps an unplayable song listed", async () => {
+  const { tracks } = await (
+    await searchFor(settings())
+  ).plugin.search({
+    query: "x",
+    kind: "tracks",
+  });
+  assert.equal(tracks[0].unavailable, false);
+});
+
+test("without the toggle an unplayable song stays unavailable", async () => {
+  const { tracks } = await (await searchFor()).plugin.search({ query: "x", kind: "tracks" });
+  assert.equal(tracks[0].unavailable, true);
 });
