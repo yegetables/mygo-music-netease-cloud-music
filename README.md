@@ -4,11 +4,13 @@ A NetEase Cloud Music plugin for [MyGo Music](https://github.com/egoist/mygo-mus
 
 ## Install
 
-[Install in MyGo Music](mygo-music://install-plugin?repo=AkinoKaede/mygo-music-netease-cloud-music), or add this repository in **Settings > Plugins > +**:
+[Install in MyGo Music](mygo-music://install-plugin?repo=yegetables/mygo-music-netease-cloud-music), or add this repository in **Settings > Plugins > +**:
 
 ```text
-https://github.com/AkinoKaede/mygo-music-netease-cloud-music
+https://github.com/yegetables/mygo-music-netease-cloud-music
 ```
+
+This is a fork of [AkinoKaede/mygo-music-netease-cloud-music](https://github.com/AkinoKaede/mygo-music-netease-cloud-music) that can also unlock songs NetEase will not stream, through a service you run yourself (see below).
 
 Use the plugin ZIP attached to a release for manual installation, not GitHub's source ZIP. The minimum supported MyGo Music version is listed in [`plugin.json`](plugin.json) as `minAppVersion`.
 
