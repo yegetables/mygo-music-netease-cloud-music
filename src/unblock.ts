@@ -20,8 +20,9 @@ export async function unblockedStream(id: string) {
   if (!base) return null;
   const route = host.setting("unblockServer") === "utils" ? "/match" : "/song/url/match";
   try {
-    // A stopped service must cost one request, not a stalled track.
-    const deadline = new Promise<null>((resolve) => setTimeout(() => resolve(null), 5000));
+    // A stopped service must cost one request, not a stalled track. A Vercel
+    // deployment cold-starts for several seconds, and the host waits 30.
+    const deadline = new Promise<null>((resolve) => setTimeout(() => resolve(null), 15000));
     const response = await Promise.race([
       fetch(`${base}${route}?id=${encodeURIComponent(id)}`, {}),
       deadline,
